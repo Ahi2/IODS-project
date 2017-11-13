@@ -3,3 +3,19 @@ lrn14 <- read.table("http://www.helsinki.fi/~kvehkala/JYTmooc/JYTOPKYS3-data.txt
 dim(lrn14)
 str(lrn14)
 # 183 rows and 60 columns 
+
+
+library(dplyr)
+
+deep_questions <- c("D03", "D11", "D19", "D27", "D07", "D14", "D22", "D30","D06",  "D15", "D23", "D31")
+surface_questions <- c("SU02","SU10","SU18","SU26", "SU05","SU13","SU21","SU29","SU08","SU16","SU24","SU32")
+strategic_questions <- c("ST01","ST09","ST17","ST25","ST04","ST12","ST20","ST28")
+
+deep_columns <- select(lrn14, one_of(deep_questions))
+lrn14$deep <- rowMeans(deep_columns)
+
+surface_columns <- select(lrn14, one_of(surface_questions))
+lrn14$surf <- rowMeans(surface_columns)
+
+strategic_columns <- select(lrn14, one_of(strategic_questions))
+lrn14$Stra <- rowMeans(strategic_columns)
