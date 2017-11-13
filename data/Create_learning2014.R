@@ -19,3 +19,16 @@ lrn14$surf <- rowMeans(surface_columns)
 
 strategic_columns <- select(lrn14, one_of(strategic_questions))
 lrn14$Stra <- rowMeans(strategic_columns)
+
+lrn14$Attitude
+lrn14$Attitude <- lrn14$Attitude / 10
+
+library(dplyr)
+
+keep_columns <- c("gender", "Age", "Attitude", "deep", "stra", "surf", "Points")
+
+learning2014 <- select (lrn14, one_of(keep_columns))
+str(learning2014)
+
+learning2014 <- filter(learning2014, Points > 0)
+str(learning2014)
