@@ -18,7 +18,8 @@ surface_columns <- select(lrn14, one_of(surface_questions))
 lrn14$surf <- rowMeans(surface_columns)
 
 strategic_columns <- select(lrn14, one_of(strategic_questions))
-lrn14$Stra <- rowMeans(strategic_columns)
+lrn14$stra <- rowMeans(strategic_columns)
+
 
 lrn14$Attitude
 lrn14$Attitude <- lrn14$Attitude / 10
@@ -32,3 +33,13 @@ str(learning2014)
 
 learning2014 <- filter(learning2014, Points > 0)
 str(learning2014)
+
+setwd("c:/Data/IODS-project")
+
+?write.csv
+
+write.csv(learning2014, file = "learning2014.csv")
+
+read.csv ("c:/Data/IODS-project/learning2014.CSV")
+str(learning2014)
+head(learning2014)
