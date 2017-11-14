@@ -17,3 +17,45 @@ str(learning2014)
 
 # Accessing the ggplot2 library for displaying plots of data
 library(ggplot2)
+
+# drawing a scatter plot matrix of all the variables in the dataset
+pairs(learning2014)
+
+# drawing another same scatter plot excluding gender, as it is a dichotomous (0 and 1) variable
+pairs(learning2014[-1])
+
+pairs(learning2014[-1], col = learning2014$gender)
+
+#accessing the GGally library to draw more advanced plots
+library(GGally)
+
+# creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another 
+p <- ggpairs(learning2014)
+p
+
+# As can be seen from the plot most variables have noramal distribution except "age", the distribution of which is positively skewed. The distribution of "Points" is also skewed negatively.  
+
+# "Attitude" and "Exam points"" exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.
+
+# So, now let's now look at the scatter plot of points versus attitude
+qplot(Attitude, Points, data = learning2014) + geom_smooth(method = "lm")
+
+# And, now let's fit a linear model, and call it 'my_model'
+my_model <- lm(Points ~ Attitude, data = learning2014)
+
+# Now, let's print out a summary of the model
+summary(my_model)
+
+# The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.000. Also F-statistics of the model is high enough. 
+
+# Other variables which display positive correlations are, e.g., "Attitude" and "deep learning", "strategic learning" and "Age". Unsurprisingly, there is a negative correlation (-0.32) between "surface learning" and "deep learning".
+
+# creating a more advanced plot matrix with ggpairs
+p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap ("facethist", bins = 20)))
+
+# drawing the new plot
+p
+
+# This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females. 
+
+# As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male. 

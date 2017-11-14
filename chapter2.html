@@ -132,13 +132,72 @@ $(document).ready(function () {
 <h1>Reading the data collected from students in 2014 into R</h1>
 <p>read.table(“C:/Data/IODS-project/learning2014.csv”, sep=“”, header=TRUE)</p>
 </div>
-<div id="looking-at-the-dimensions-of-the-data-first-value-is-the-number-of-rows-observations-second-is-columns-variables" class="section level1">
-<h1>looking at the dimensions of the data (first value is the number of rows (observations) second is columns (variables))</h1>
+<div id="looking-at-the-dimensions-of-the-data-first-value-will-be-the-number-of-rows-observations-second-will-be-columns-variables" class="section level1">
+<h1>looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))</h1>
 <p>dim(learning2014)</p>
 </div>
 <div id="looking-at-the-structure-of-the-data" class="section level1">
 <h1>looking at the structure of the data</h1>
 <p>str(learning2014)</p>
+</div>
+<div id="accessing-the-ggplot2-library-for-displaying-plots-of-data" class="section level1">
+<h1>Accessing the ggplot2 library for displaying plots of data</h1>
+<p>library(ggplot2)</p>
+</div>
+<div id="drawing-a-scatter-plot-matrix-of-all-the-variables-in-the-dataset" class="section level1">
+<h1>drawing a scatter plot matrix of all the variables in the dataset</h1>
+<p>pairs(learning2014)</p>
+</div>
+<div id="drawing-another-same-scatter-plot-excluding-gender-as-it-is-a-dichotomous-0-and-1-variable" class="section level1">
+<h1>drawing another same scatter plot excluding gender, as it is a dichotomous (0 and 1) variable</h1>
+<p>pairs(learning2014[-1])</p>
+<p>pairs(learning2014[-1], col = learning2014$gender)</p>
+</div>
+<div id="accessing-the-ggally-library-to-draw-more-advanced-plots" class="section level1">
+<h1>accessing the GGally library to draw more advanced plots</h1>
+<p>library(GGally)</p>
+</div>
+<div id="creating-a-plot-matrix-with-ggpair-where-we-can-see-the-distribution-of-the-variables-and-their-correlation-with-one-another" class="section level1">
+<h1>creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another</h1>
+<p>p &lt;- ggpairs(learning2014) p</p>
+</div>
+<div id="as-can-be-seen-from-the-plot-most-variables-have-noramal-distribution-except-age-the-distribution-of-which-is-positively-skewed.-the-distribution-of-points-is-also-skewed-negatively." class="section level1">
+<h1>As can be seen from the plot most variables have noramal distribution except “age”, the distribution of which is positively skewed. The distribution of “Points” is also skewed negatively.</h1>
+</div>
+<div id="attitude-and-exam-points-exhibit-the-highest-positive-correlation-which-is-reasonable.-as-your-attitute-is-more-positive-toward-statistics-you-are-more-likely-to-get-a-better-point." class="section level1">
+<h1>“Attitude” and “Exam points”&quot; exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.</h1>
+</div>
+<div id="so-now-lets-now-look-at-the-scatter-plot-of-points-versus-attitude" class="section level1">
+<h1>So, now let’s now look at the scatter plot of points versus attitude</h1>
+<p>qplot(Attitude, Points, data = learning2014) + geom_smooth(method = “lm”)</p>
+</div>
+<div id="and-now-lets-fit-a-linear-model-and-call-it-my_model" class="section level1">
+<h1>And, now let’s fit a linear model, and call it ‘my_model’</h1>
+<p>my_model &lt;- lm(Points ~ Attitude, data = learning2014)</p>
+</div>
+<div id="now-lets-print-out-a-summary-of-the-model" class="section level1">
+<h1>Now, let’s print out a summary of the model</h1>
+<p>summary(my_model)</p>
+</div>
+<div id="the-summary-indicates-that-there-is-a-statistically-significant-positive-relationship-between-attitude-and-points-with-p-value-of-under-o.ooo.-also-f-statistics-is-high-enough." class="section level1">
+<h1>The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under o.ooo. Also F-statistics is high enough.</h1>
+</div>
+<div id="other-variables-which-display-positive-correlations-are-e.g.-attitude-and-deep-learning-strategic-learning-and-age.-unsurprisingly-there-is-a-negative-correlation--0.32-between-surface-learning-and-deep-learning." class="section level1">
+<h1>Other variables which display positive correlations are, e.g., “Attitude” and “deep learning”, “strategic learning” and “Age”. Unsurprisingly, there is a negative correlation (-0.32) between “surface learning” and “deep learning”.</h1>
+</div>
+<div id="creating-a-more-advanced-plot-matrix-with-ggpairs" class="section level1">
+<h1>creating a more advanced plot matrix with ggpairs</h1>
+<p>p &lt;- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap (“facethist”, bins = 20)))</p>
+</div>
+<div id="drawing-the-new-plot" class="section level1">
+<h1>drawing the new plot</h1>
+<p>p</p>
+</div>
+<div id="this-new-plot-shows-differences-between-males-and-females-in-blueish-and-pinkish-color-respectively.-it-also-shows-box-plots-of-the-variables-for-both-males-and-females." class="section level1">
+<h1>This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females.</h1>
+</div>
+<div id="as-an-example-we-can-now-see-that-attitude-of-male-students-toward-learning-statistics-is-a-bit-more-positive-compared-to-their-females-classmates-hence-the-positive-skewness-of-the-distribution-for-male." class="section level1">
+<h1>As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male.</h1>
 </div>
 
 
