@@ -128,127 +128,72 @@ $(document).ready(function () {
 <li>Assume the reader has no previous knowledge of your data or the more advanced methods you are using</li>
 </ul>
 </div>
-<div id="reading-the-data-collected-from-students-in-2014-into-r" class="section level1">
-<h1>Reading the data collected from students in 2014 into R</h1>
-<p>read.table(“C:/Data/IODS-project/learning2014.csv”, sep=“”, header=TRUE)</p>
-</div>
-<div id="looking-at-the-dimensions-of-the-data-first-value-will-be-the-number-of-rows-observations-second-will-be-columns-variables" class="section level1">
-<h1>looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))</h1>
+<div id="reading-the-data-into-r" class="section level1">
+<h1>1. Reading the data into R</h1>
+<p>Reading the data collected from students in 2014 into R<br />
+read.table(“C:/Data/IODS-project/learning2014.csv”, sep=“”, header=TRUE)</p>
+<p>looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))</p>
 <p>dim(learning2014)</p>
-</div>
-<div id="looking-at-the-structure-of-the-data" class="section level1">
-<h1>looking at the structure of the data</h1>
+<p>looking at the structure of the data</p>
 <p>str(learning2014)</p>
 </div>
-<div id="accessing-the-ggplot2-library-for-displaying-plots-of-data" class="section level1">
-<h1>Accessing the ggplot2 library for displaying plots of data</h1>
+<div id="graphical-view-of-the-data" class="section level1">
+<h1>2. Graphical view of the data</h1>
+<p>Accessing the ggplot2 library for displaying plots of data</p>
 <p>library(ggplot2)</p>
-</div>
-<div id="drawing-a-scatter-plot-matrix-of-all-the-variables-in-the-dataset" class="section level1">
-<h1>drawing a scatter plot matrix of all the variables in the dataset</h1>
+<p>drawing a scatter plot matrix of all the variables in the dataset</p>
 <p>pairs(learning2014)</p>
-</div>
-<div id="drawing-another-same-scatter-plot-excluding-gender-as-it-is-a-dichotomous-0-and-1-variable" class="section level1">
-<h1>drawing another same scatter plot excluding gender, as it is a dichotomous (0 and 1) variable</h1>
+<p>drawing another same scatter plot excluding gender variable</p>
 <p>pairs(learning2014[-1])</p>
 <p>pairs(learning2014[-1], col = learning2014$gender)</p>
-</div>
-<div id="accessing-the-ggally-library-to-draw-more-advanced-plots" class="section level1">
-<h1>accessing the GGally library to draw more advanced plots</h1>
+<p>accessing the GGally library to draw more advanced plots</p>
 <p>library(GGally)</p>
-</div>
-<div id="creating-a-plot-matrix-with-ggpair-where-we-can-see-the-distribution-of-the-variables-and-their-correlation-with-one-another" class="section level1">
-<h1>creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another</h1>
+<p>creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another</p>
 <p>p &lt;- ggpairs(learning2014) p</p>
-</div>
-<div id="as-can-be-seen-from-the-plot-most-variables-have-noramal-distribution-except-age-the-distribution-of-which-is-positively-skewed.-the-distribution-of-points-is-also-skewed-negatively." class="section level1">
-<h1>As can be seen from the plot most variables have noramal distribution except “age”, the distribution of which is positively skewed. The distribution of “Points” is also skewed negatively.</h1>
-</div>
-<div id="attitude-and-exam-points-exhibit-the-highest-positive-correlation-which-is-reasonable.-as-your-attitute-is-more-positive-toward-statistics-you-are-more-likely-to-get-a-better-point." class="section level1">
-<h1>“Attitude” and “Exam points”&quot; exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.</h1>
-</div>
-<div id="so-now-lets-now-look-at-the-scatter-plot-of-points-versus-attitude" class="section level1">
-<h1>So, now let’s now look at the scatter plot of points versus attitude</h1>
+<p>As can be seen from the plot most variables have noramal distribution except “age”, the distribution of which is positively skewed. The distribution of “Points” is also skewed negatively.</p>
+<p>“Attitude” and “Exam points”&quot; exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.</p>
+<p>So, now let’s now look at the scatter plot of points versus attitude</p>
 <p>qplot(Attitude, Points, data = learning2014) + geom_smooth(method = “lm”)</p>
-</div>
-<div id="and-now-lets-fit-a-linear-model-and-call-it-my_model" class="section level1">
-<h1>And, now let’s fit a linear model, and call it ‘my_model’</h1>
+<p>And, now let’s fit a linear model, and call it ‘my_model’</p>
 <p>my_model &lt;- lm(Points ~ Attitude, data = learning2014)</p>
-</div>
-<div id="now-lets-print-out-a-summary-of-the-model" class="section level1">
-<h1>Now, let’s print out a summary of the model</h1>
+<p>Now, let’s print out a summary of the model</p>
 <p>summary(my_model)</p>
-</div>
-<div id="the-summary-indicates-that-there-is-a-statistically-significant-positive-relationship-between-attitude-and-points-with-p-value-of-under-0.001.-also-f-statistics-of-the-model-is-high-enough." class="section level1">
-<h1>The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.001. Also F-statistics of the model is high enough.</h1>
-</div>
-<div id="other-variables-which-display-positive-correlations-are-e.g.-attitude-and-deep-learning-strategic-learning-and-age.-unsurprisingly-there-is-a-negative-correlation--0.32-between-surface-learning-and-deep-learning." class="section level1">
-<h1>Other variables which display positive correlations are, e.g., “Attitude” and “deep learning”, “strategic learning” and “Age”. Unsurprisingly, there is a negative correlation (-0.32) between “surface learning” and “deep learning”.</h1>
-</div>
-<div id="creating-a-more-advanced-plot-matrix-with-ggpairs" class="section level1">
-<h1>creating a more advanced plot matrix with ggpairs</h1>
+<p>The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.001. Also F-statistics of the model is high enough.</p>
+<p>Other variables which display positive correlations are, e.g., “Attitude” and “deep learning”, “strategic learning” and “Age”. Unsurprisingly, there is a negative correlation (-0.32) between “surface learning” and “deep learning”.</p>
+<p>creating a more advanced plot matrix with ggpairs</p>
 <p>p &lt;- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap (“facethist”, bins = 20)))</p>
+<p>drawing the new plot p</p>
+<p>This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females.</p>
+<p>As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male.</p>
 </div>
-<div id="drawing-the-new-plot" class="section level1">
-<h1>drawing the new plot</h1>
-<p>p</p>
-</div>
-<div id="this-new-plot-shows-differences-between-males-and-females-in-blueish-and-pinkish-color-respectively.-it-also-shows-box-plots-of-the-variables-for-both-males-and-females." class="section level1">
-<h1>This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females.</h1>
-</div>
-<div id="as-an-example-we-can-now-see-that-attitude-of-male-students-toward-learning-statistics-is-a-bit-more-positive-compared-to-their-females-classmates-hence-the-positive-skewness-of-the-distribution-for-male." class="section level1">
-<h1>As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male.</h1>
-</div>
-<div id="creating-a-regression-model-with-multiple-explanatory-variables-multiple-regression.-i-use-points-as-the-dependent-variable-y-and-attitude-surface-learning-and-strategic-learning-as-explanatory-variables-x." class="section level1">
-<h1>Creating a regression model with multiple explanatory variables (multiple regression). I use Points as the dependent variable (y), and Attitude, surface learning, and strategic learning as explanatory variables (X).</h1>
+<div id="multiple-regression-model" class="section level1">
+<h1>3. Multiple Regression Model</h1>
+<p>Creating a regression model with multiple explanatory variables (multiple regression). I use Points as the dependent variable (y), and Attitude, surface learning, and strategic learning as explanatory variables (X).</p>
 <p>my_model2 &lt;- lm(Points ~ Attitude + stra + surf, data = learning2014)</p>
-</div>
-<div id="printg-out-a-summary-of-the-model" class="section level1">
-<h1>printg out a summary of the model</h1>
+<p>printg out a summary of the model</p>
 <p>summary(my_model2)</p>
+<p>As the summary of the model indicates, only Attitude has a statistically significant relationship with Points.</p>
+<p>Now, let’s remove surface learning from the model, and call it my_model3 my_model3 &lt;- lm(Points ~ Attitude + stra, data = learning2014)</p>
 </div>
-<div id="as-the-summary-of-the-model-indicates-only-attitude-has-a-statistically-significant-relationship-with-points." class="section level1">
-<h1>As the summary of the model indicates, only Attitude has a statistically significant relationship with Points.</h1>
-</div>
-<div id="now-lets-remove-surface-learning-from-the-model-and-call-it-my_model3" class="section level1">
-<h1>Now, let’s remove surface learning from the model, and call it my_model3</h1>
-<p>my_model3 &lt;- lm(Points ~ Attitude + stra, data = learning2014)</p>
-</div>
-<div id="lets-print-out-the-new-model" class="section level1">
-<h1>Let’s print out the new model</h1>
+<div id="summary-of-the-multiple-regression-model" class="section level1">
+<h1>4. Summary of the multiple regression model</h1>
+<p>Let’s print out the new model</p>
 <p>summary(my_model3)</p>
+<p>the model shows that still only attitude is siginificant. However, now the p-value of ‘stra’ is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance.</p>
+<p>The model shows that “Attitude”&quot; is positively and strongly correlates with “Points”. As explained earlier, this is reasonable, because those who have a more positive attitude toward sttistical learning will be more likely to receive a higher point (in a statstics test, e.g.). Also, there is a positive correlation between strategic learning and points students have received. This makes sense, too. The more strategic thinking oriented students are, the higher the probability of receiving a better grade. But the correlation is weak, yet could be considered significant.</p>
+<p>R-squared of the model is ~ 0.20, which indicates that around 20 percent of the variance of the variables is explained by the regression model. Whether or not this value is acceptable depends on, e.g., the nature of the study and the dicsipline. As a general rule, the higher the R-squared the better the model, but this is not the case always. The adjusted R-squared is the same as R-squared but has been adjusted for the number of predictors in the model.</p>
 </div>
-<div id="the-model-shows-that-still-only-attitude-is-siginificant.-however-now-the-p-value-of-stra-is-smaller-0.08.this-value-is-smaller-than-0.1-which-is-sometimes-considered-to-indicate-the-statistical-significance." class="section level1">
-<h1>the model shows that still only attitude is siginificant. However, now the p-value of ‘stra’ is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance.</h1>
-</div>
-<div id="the-model-shows-that-attitude-is-positively-and-strongly-correlates-with-points.-as-explained-earlier-this-is-reasonable-because-those-who-have-a-more-positive-attitude-toward-sttistical-learning-will-be-more-likely-to-receive-a-higher-point-in-a-statstics-test-e.g..-also-there-is-a-positive-correlation-between-strategic-learning-and-points-students-have-received.-this-makes-sense-too.-the-more-strategic-thinking-oriented-students-are-the-higher-the-probability-of-receiving-a-better-grade.-but-the-correlation-is-weak-yet-could-be-considered-significant." class="section level1">
-<h1>The model shows that “Attitude”&quot; is positively and strongly correlates with “Points”. As explained earlier, this is reasonable, because those who have a more positive attitude toward sttistical learning will be more likely to receive a higher point (in a statstics test, e.g.). Also, there is a positive correlation between strategic learning and points students have received. This makes sense, too. The more strategic thinking oriented students are, the higher the probability of receiving a better grade. But the correlation is weak, yet could be considered significant.</h1>
-</div>
-<div id="r-squared-of-the-model-is-0.20-which-indicates-that-around-20-percent-of-the-variance-of-the-variables-is-explained-by-the-regression-model.-whether-or-not-this-value-is-acceptable-depends-on-e.g.-the-nature-of-the-study-and-the-dicsipline.-as-a-general-rule-the-higher-the-r-squared-the-better-the-model-but-this-is-not-the-case-always.-the-adjusted-r-squared-is-the-same-as-r-squared-but-has-been-adjusted-for-the-number-of-predictors-in-the-model." class="section level1">
-<h1>R-squared of the model is ~ 0.20, which indicates that around 20 percent of the variance of the variables is explained by the regression model. Whether or not this value is acceptable depends on, e.g., the nature of the study and the dicsipline. As a general rule, the higher the R-squared the better the model, but this is not the case always. The adjusted R-squared is the same as R-squared but has been adjusted for the number of predictors in the model.</h1>
-</div>
-<div id="producing-diagnostic-plots" class="section level1">
-<h1>Producing diagnostic plots</h1>
+<div id="diagnostic-plots" class="section level1">
+<h1>5. Diagnostic plots</h1>
+<p>Producing diagnostic plots</p>
 <p>plot(my_model3, which = c(1,2,5))</p>
-</div>
-<div id="now-plots-of-residuals-vs.fitted-values-1-normal-qq-plot-2-and-residuals-vs.leverage-have-been-produced." class="section level1">
-<h1>Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.</h1>
-</div>
-<div id="now-lets-place-all-the-above-graphs-to-the-same-plots" class="section level1">
-<h1>Now, let’s place all the above graphs to the same plots</h1>
+<p>Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.</p>
+<p>Now, let’s place all the above graphs to the same plots</p>
 <p>par(mfrow = c(2,2)) plot(my_model3, which = c(1,2,5))</p>
-</div>
-<div id="what-do-these-plots-indicate-lets-first-explore-residuls-vs-fitted-values.-this-plot-is-used-to-understand-the-linearity-of-the-model-the-unequality-of-error-variance-and-if-there-is-any-outliers.-looking-at-the-plot-reveals-that-the-residuals-are-scattered-rather-randolmy-around-0-and-have-formed-a-horizontal-line-meaning-that-the-relationship-of-the-variables-in-our-model-is-linear-and-also-the-errors-are-equal.-only-there-are-some-values-that-are-far-from-the-rest-lower-side-of-the-plot-these-could-be-considered-as-outliers.-how-influential-they-are-in-our-model-will-be-determined-by-another-plot-which-we-will-look-at-soon." class="section level1">
-<h1>What do these plots indicate? Let’s first explore “Residuls vs Fitted values”. This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon.</h1>
-</div>
-<div id="now-lets-look-at-the-normal-q-q-plot.-this-plot-helps-us-understand-whetherthe-data-in-our-variables-are-distibuted-normally.-if-points-in-the-plot-fall-on-a-straight-line-the-variables-have-normal-distribution.-the-points-in-our-plot-here-fall-somewhat-on-a-straight-line-hence-the-normality-of-the-distribution-of-the-variables." class="section level1">
-<h1>Now let’s look at the Normal Q-Q plot. This plot helps us understand whetherthe data in our variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. The points in our plot here fall somewhat on a straight line, hence the normality of the distribution of the variables.</h1>
-</div>
-<div id="finally-lets-look-at-the-residuals-vs-leverage.-this-plot-helps-us-understand-the-influential-outliers-those-that-actually-affect-our-model-which-would-be-better-to-be-removed.-one-way-to-understand-those-outliers-is-to-look-at-the-cooks-distance-lines-dashed-red-line.-if-the-distance-is-high-then-there-are-influential-outliers.-in-our-plot-however-the-points-are-very-close-to-the-cooks-distance-line-hence-there-is-no-influential-outlier-in-our-data." class="section level1">
-<h1>Finally, let’s look at the Residuals vs Leverage. This plot helps us understand the influential outliers, those that actually affect our model, which would be better to be removed. One way to understand those outliers is to look at the Cook’s distance lines (dashed red line). If the distance is high, then there are influential outliers. In our plot, however, the points are very close to the Cook’s distance line, hence there is no influential outlier in our data.</h1>
-</div>
-<div id="these-diagnostic-plots-explained-above-confirm-the-validity-of-our-statistical-model-that-is-our-model-is-linear-the-variables-are-normally-distributed-and-there-are-no-major-influential-outliers." class="section level1">
-<h1>These diagnostic plots explained above confirm the validity of our statistical model; that is, our model is linear, the variables are normally distributed, and there are no major influential outliers.</h1>
+<p>What do these plots indicate? Let’s first explore “Residuls vs Fitted values”. This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon.</p>
+<p>Now let’s look at the Normal Q-Q plot. This plot helps us understand whetherthe data in our variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. The points in our plot here fall somewhat on a straight line, hence the normality of the distribution of the variables.</p>
+<p>Finally, let’s look at the Residuals vs Leverage. This plot helps us understand the influential outliers, those that actually affect our model, which would be better to be removed. One way to understand those outliers is to look at the Cook’s distance lines (dashed red line). If the distance is high, then there are influential outliers. In our plot, however, the points are very close to the Cook’s distance line, hence there is no influential outlier in our data.</p>
+<p>These diagnostic plots explained above confirm the validity of our statistical model; that is, our model is linear, the variables are normally distributed, and there are no major influential outliers.</p>
 </div>
 
 

@@ -6,94 +6,118 @@
 - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
 - Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
 
-# Reading the data collected from students in 2014 into R  
+# 1. Reading the data into R
+Reading the data collected from students in 2014 into R  
 read.table("C:/Data/IODS-project/learning2014.csv", sep="\t", header=TRUE)
 
-# looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))
+looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))
+
 dim(learning2014)
 
-# looking at the structure of the data
+looking at the structure of the data
+
 str(learning2014)
 
-# Accessing the ggplot2 library for displaying plots of data
+# 2. Graphical view of the data
+
+Accessing the ggplot2 library for displaying plots of data
+
 library(ggplot2)
 
-# drawing a scatter plot matrix of all the variables in the dataset
+drawing a scatter plot matrix of all the variables in the dataset
+
 pairs(learning2014)
 
-# drawing another same scatter plot excluding gender, as it is a dichotomous (0 and 1) variable
+drawing another same scatter plot excluding gender variable
+
 pairs(learning2014[-1])
 
 pairs(learning2014[-1], col = learning2014$gender)
 
-#accessing the GGally library to draw more advanced plots
+accessing the GGally library to draw more advanced plots
+
 library(GGally)
 
-# creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another 
+creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another 
+
 p <- ggpairs(learning2014)
 p
 
-# As can be seen from the plot most variables have noramal distribution except "age", the distribution of which is positively skewed. The distribution of "Points" is also skewed negatively.  
+As can be seen from the plot most variables have noramal distribution except "age", the distribution of which is positively skewed. The distribution of "Points" is also skewed negatively.  
 
-# "Attitude" and "Exam points"" exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.
+"Attitude" and "Exam points"" exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.
 
-# So, now let's now look at the scatter plot of points versus attitude
+So, now let's now look at the scatter plot of points versus attitude
+
 qplot(Attitude, Points, data = learning2014) + geom_smooth(method = "lm")
 
-# And, now let's fit a linear model, and call it 'my_model'
+And, now let's fit a linear model, and call it 'my_model'
+
 my_model <- lm(Points ~ Attitude, data = learning2014)
 
-# Now, let's print out a summary of the model
+Now, let's print out a summary of the model
+
 summary(my_model)
 
-# The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.001. Also F-statistics of the model is high enough. 
+The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.001. Also F-statistics of the model is high enough. 
 
-# Other variables which display positive correlations are, e.g., "Attitude" and "deep learning", "strategic learning" and "Age". Unsurprisingly, there is a negative correlation (-0.32) between "surface learning" and "deep learning".
+Other variables which display positive correlations are, e.g., "Attitude" and "deep learning", "strategic learning" and "Age". Unsurprisingly, there is a negative correlation (-0.32) between "surface learning" and "deep learning".
 
-# creating a more advanced plot matrix with ggpairs
+creating a more advanced plot matrix with ggpairs
+
 p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap ("facethist", bins = 20)))
 
-# drawing the new plot
+drawing the new plot
 p
 
-# This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females. 
+This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females. 
 
-# As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male. 
+As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male. 
 
-# Creating a regression model with multiple explanatory variables (multiple regression). I use Points as the dependent variable (y), and Attitude, surface learning, and strategic learning as explanatory variables (X).
+# 3. Multiple Regression Model
+
+Creating a regression model with multiple explanatory variables (multiple regression). I use Points as the dependent variable (y), and Attitude, surface learning, and strategic learning as explanatory variables (X).
+
 my_model2 <- lm(Points ~ Attitude + stra + surf, data = learning2014)
 
-# printg out a summary of the model
+printg out a summary of the model
+
 summary(my_model2)
 
-# As the summary of the model indicates, only Attitude has a statistically significant relationship with Points.
+As the summary of the model indicates, only Attitude has a statistically significant relationship with Points.
 
-# Now, let's remove surface learning from the model, and call it my_model3
+Now, let's remove surface learning from the model, and call it my_model3
 my_model3 <- lm(Points ~ Attitude + stra, data = learning2014)
 
-# Let's print out the new model
+# 4. Summary of the multiple regression model
+
+Let's print out the new model
+
 summary(my_model3)
 
-# the model shows that still only attitude is siginificant. However, now the p-value of 'stra' is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance. 
+the model shows that still only attitude is siginificant. However, now the p-value of 'stra' is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance. 
 
-# The model shows that "Attitude"" is positively and strongly correlates with "Points". As explained earlier, this is reasonable, because those who have a more positive attitude toward sttistical learning will be more likely to receive a higher point (in a statstics test, e.g.). Also, there is a positive correlation between strategic learning and points students have received. This makes sense, too. The more strategic thinking oriented students are, the higher the probability of receiving a better grade. But the correlation is weak, yet could be considered significant.
+The model shows that "Attitude"" is positively and strongly correlates with "Points". As explained earlier, this is reasonable, because those who have a more positive attitude toward sttistical learning will be more likely to receive a higher point (in a statstics test, e.g.). Also, there is a positive correlation between strategic learning and points students have received. This makes sense, too. The more strategic thinking oriented students are, the higher the probability of receiving a better grade. But the correlation is weak, yet could be considered significant.
 
-# R-squared of the model is ~ 0.20, which indicates that around 20 percent of the variance of the variables is explained by the regression model. Whether or not this value is acceptable depends on, e.g., the nature of the study and the dicsipline. As a general rule, the higher the R-squared the better the model, but this is not the case always. The adjusted R-squared is the same as R-squared but has been adjusted for the number of predictors in the model.  
+R-squared of the model is ~ 0.20, which indicates that around 20 percent of the variance of the variables is explained by the regression model. Whether or not this value is acceptable depends on, e.g., the nature of the study and the dicsipline. As a general rule, the higher the R-squared the better the model, but this is not the case always. The adjusted R-squared is the same as R-squared but has been adjusted for the number of predictors in the model.  
 
-# Producing diagnostic plots
+# 5. Diagnostic plots
+
+Producing diagnostic plots
+
 plot(my_model3, which = c(1,2,5))
 
-# Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.
+Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.
 
-# Now, let's place all the above graphs to the same plots
+Now, let's place all the above graphs to the same plots
+
 par(mfrow = c(2,2))
 plot(my_model3, which = c(1,2,5))
 
-# What do these plots indicate? Let's first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon. 
+What do these plots indicate? Let's first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon. 
 
-# Now let's look at the Normal Q-Q plot. This plot helps us understand whetherthe data in our variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. The points in our plot here fall somewhat on a straight line, hence the normality of the distribution of the variables.
+Now let's look at the Normal Q-Q plot. This plot helps us understand whetherthe data in our variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. The points in our plot here fall somewhat on a straight line, hence the normality of the distribution of the variables.
 
-# Finally, let's look at the Residuals vs Leverage. This plot helps us understand the influential outliers, those that actually affect our model, which would be better to be removed. One way to understand those outliers is to look at the Cook's distance lines (dashed red line). If the distance is high, then there are influential outliers. In our plot, however, the points are very close to the Cook's distance line, hence there is no influential outlier in our data.  
+Finally, let's look at the Residuals vs Leverage. This plot helps us understand the influential outliers, those that actually affect our model, which would be better to be removed. One way to understand those outliers is to look at the Cook's distance lines (dashed red line). If the distance is high, then there are influential outliers. In our plot, however, the points are very close to the Cook's distance line, hence there is no influential outlier in our data.  
 
-# These diagnostic plots explained above confirm the validity of our statistical model; that is, our model is linear, the variables are normally distributed, and there are no major influential outliers.
-
+These diagnostic plots explained above confirm the validity of our statistical model; that is, our model is linear, the variables are normally distributed, and there are no major influential outliers.

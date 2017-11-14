@@ -142,7 +142,12 @@ $(document).ready(function () {
 <ul>
 <li><a href="#about-the-project">About the project</a></li>
 <li><a href="#good-course">“Good course!”</a></li>
-<li><a href="#insert-chapter-2-title-here">Insert chapter 2 title here</a></li>
+<li><a href="#regression-and-model-validation">Regression and model validation</a></li>
+<li><a href="#reading-the-data-into-r">1. Reading the data into R</a></li>
+<li><a href="#graphical-view-of-the-data">2. Graphical view of the data</a></li>
+<li><a href="#multiple-regression-model">3. Multiple Regression Model</a></li>
+<li><a href="#summary-of-the-multiple-regression-model">4. Summary of the multiple regression model</a></li>
+<li><a href="#diagnostic-plots">5. Diagnostic plots</a></li>
 </ul>
 </div>
 
@@ -155,14 +160,81 @@ $(document).ready(function () {
 <h1>“Good course!”</h1>
 <hr />
 </div>
-<div id="insert-chapter-2-title-here" class="section level1">
-<h1>Insert chapter 2 title here</h1>
+<div id="regression-and-model-validation" class="section level1">
+<h1>Regression and model validation</h1>
 <p><em>Describe the work you have done this week and summarize your learning.</em></p>
 <ul>
 <li>Describe your work and results clearly.</li>
 <li>Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods</li>
 <li>Assume the reader has no previous knowledge of your data or the more advanced methods you are using</li>
 </ul>
+</div>
+<div id="reading-the-data-into-r" class="section level1">
+<h1>1. Reading the data into R</h1>
+<p>Reading the data collected from students in 2014 into R<br />
+read.table(“C:/Data/IODS-project/learning2014.csv”, sep=“”, header=TRUE)</p>
+<p>looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))</p>
+<p>dim(learning2014)</p>
+<p>looking at the structure of the data</p>
+<p>str(learning2014)</p>
+</div>
+<div id="graphical-view-of-the-data" class="section level1">
+<h1>2. Graphical view of the data</h1>
+<p>Accessing the ggplot2 library for displaying plots of data</p>
+<p>library(ggplot2)</p>
+<p>drawing a scatter plot matrix of all the variables in the dataset</p>
+<p>pairs(learning2014)</p>
+<p>drawing another same scatter plot excluding gender variable</p>
+<p>pairs(learning2014[-1])</p>
+<p>pairs(learning2014[-1], col = learning2014$gender)</p>
+<p>accessing the GGally library to draw more advanced plots</p>
+<p>library(GGally)</p>
+<p>creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another</p>
+<p>p &lt;- ggpairs(learning2014) p</p>
+<p>As can be seen from the plot most variables have noramal distribution except “age”, the distribution of which is positively skewed. The distribution of “Points” is also skewed negatively.</p>
+<p>“Attitude” and “Exam points”&quot; exhibit the highest (positive) correlation, which is reasonable. As your attitute is more positive toward statistics, you are more likely to get a better point.</p>
+<p>So, now let’s now look at the scatter plot of points versus attitude</p>
+<p>qplot(Attitude, Points, data = learning2014) + geom_smooth(method = “lm”)</p>
+<p>And, now let’s fit a linear model, and call it ‘my_model’</p>
+<p>my_model &lt;- lm(Points ~ Attitude, data = learning2014)</p>
+<p>Now, let’s print out a summary of the model</p>
+<p>summary(my_model)</p>
+<p>The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.001. Also F-statistics of the model is high enough.</p>
+<p>Other variables which display positive correlations are, e.g., “Attitude” and “deep learning”, “strategic learning” and “Age”. Unsurprisingly, there is a negative correlation (-0.32) between “surface learning” and “deep learning”.</p>
+<p>creating a more advanced plot matrix with ggpairs</p>
+<p>p &lt;- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap (“facethist”, bins = 20)))</p>
+<p>drawing the new plot p</p>
+<p>This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females.</p>
+<p>As an example, we can now see that attitude of male students toward learning statistics is a bit more positive compared to their females classmates, hence the positive skewness of the distribution for male.</p>
+</div>
+<div id="multiple-regression-model" class="section level1">
+<h1>3. Multiple Regression Model</h1>
+<p>Creating a regression model with multiple explanatory variables (multiple regression). I use Points as the dependent variable (y), and Attitude, surface learning, and strategic learning as explanatory variables (X).</p>
+<p>my_model2 &lt;- lm(Points ~ Attitude + stra + surf, data = learning2014)</p>
+<p>printg out a summary of the model</p>
+<p>summary(my_model2)</p>
+<p>As the summary of the model indicates, only Attitude has a statistically significant relationship with Points.</p>
+<p>Now, let’s remove surface learning from the model, and call it my_model3 my_model3 &lt;- lm(Points ~ Attitude + stra, data = learning2014)</p>
+</div>
+<div id="summary-of-the-multiple-regression-model" class="section level1">
+<h1>4. Summary of the multiple regression model</h1>
+<p>Let’s print out the new model</p>
+<p>summary(my_model3)</p>
+<p>the model shows that still only attitude is siginificant. However, now the p-value of ‘stra’ is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance.</p>
+<p>The model shows that “Attitude”&quot; is positively and strongly correlates with “Points”. As explained earlier, this is reasonable, because those who have a more positive attitude toward sttistical learning will be more likely to receive a higher point (in a statstics test, e.g.). Also, there is a positive correlation between strategic learning and points students have received. This makes sense, too. The more strategic thinking oriented students are, the higher the probability of receiving a better grade. But the correlation is weak, yet could be considered significant.</p>
+<p>R-squared of the model is ~ 0.20, which indicates that around 20 percent of the variance of the variables is explained by the regression model. Whether or not this value is acceptable depends on, e.g., the nature of the study and the dicsipline. As a general rule, the higher the R-squared the better the model, but this is not the case always. The adjusted R-squared is the same as R-squared but has been adjusted for the number of predictors in the model.</p>
+</div>
+<div id="diagnostic-plots" class="section level1">
+<h1>5. Diagnostic plots</h1>
+<p>Producing diagnostic plots</p>
+<p>plot(my_model3, which = c(1,2,5))</p>
+<p>Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.</p>
+<p>Now, let’s place all the above graphs to the same plots</p>
+<p>par(mfrow = c(2,2)) plot(my_model3, which = c(1,2,5))</p>
+<p>What do these plots indicate? Let’s first explore “Residuls vs Fitted values”. This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon.</p>
+<p>Now let’s look at the Normal Q-Q plot. This plot helps us understand whetherthe data in our variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. The points in our plot here fall somewhat on a straight line, hence the normality of the distribution of the variables.</p>
+<p>Finally, let’s look at the Residuals vs Leverage. This plot helps us understand the influential outliers, those that actually affect our model, which would be better to be removed. One way to understand those outliers is to look at the Cook’s distance lines (dashed red line). If the distance is high, then there are influential outliers. In our plot, however, the points are very close to the Cook’s distance line, hence there is no influential outlier in our data.</p>
+<p>These diagnostic plots explained above confirm the validity of our statistical model; that is, our model is linear, the variables are normally distributed, and there are no major influential outliers.</p>
 <hr />
 </div>
 
