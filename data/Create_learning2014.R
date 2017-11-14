@@ -43,3 +43,6 @@ write.csv(learning2014, file = "learning2014.csv")
 read.csv ("c:/Data/IODS-project/learning2014.CSV")
 str(learning2014)
 head(learning2014)
+
+dim(learning2014)
+str(learning2014)
