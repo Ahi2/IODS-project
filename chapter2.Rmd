@@ -80,4 +80,20 @@ summary(my_model3)
 
 # R-squared of the model is ~ 0.20, which indicates that around 20 percent of the variance of the variables is explained by the regression model. Whether or not this value is acceptable depends on, e.g., the nature of the study and the dicsipline. As a general rule, the higher the R-squared the better the model, but this is not the case always. The adjusted R-squared is the same as R-squared but has been adjusted for the number of predictors in the model.  
 
+# Producing diagnostic plots
+plot(my_model3, which = c(1,2,5))
+
+# Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.
+
+# Now, let's place all the above graphs to the same plots
+par(mfrow = c(2,2))
+plot(my_model3, which = c(1,2,5))
+
+# What do these plots indicate? Let's first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon. 
+
+# Now let's look at the Normal Q-Q plot. This plot helps us understand whetherthe data in our variables are distibuted normally. If points in the plot fall on a straight line, the variables have normal distribution. The points in our plot here fall somewhat on a straight line, hence the normality of the distribution of the variables.
+
+# Finally, let's look at the Residuals vs Leverage. This plot helps us understand the influential outliers, those that actually affect our model, which would be better to be removed. One way to understand those outliers is to look at the Cook's distance lines (dashed red line). If the distance is high, then there are influential outliers. In our plot, however, the points are very close to the Cook's distance line, hence there is no influential outlier in our data.  
+
+# These diagnostic plots explained above confirm the validity of our statistical model; that is, our model is linear, the variables are normally distributed, and there are no major influential outliers.
 
