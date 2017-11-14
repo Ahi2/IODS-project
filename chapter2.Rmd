@@ -8,40 +8,58 @@
 
 # 1. Reading the data into R
 Reading the data collected from students in 2014 into R  
-read.table("C:/Data/IODS-project/learning2014.csv", sep="\t", header=TRUE)
+
+```{r}
+learning2014 <- read.table("C:/Data/IODS-project/learning2014.csv", sep=";", header=TRUE)
+```
 
 looking at the dimensions of the data (first value will be the number of rows (observations), second will be columns (variables))
 
+```{r}
 dim(learning2014)
+```
 
 looking at the structure of the data
 
+```{r}
 str(learning2014)
+```
 
 # 2. Graphical view of the data
 
 Accessing the ggplot2 library for displaying plots of data
 
+```{r}
 library(ggplot2)
+```
 
 drawing a scatter plot matrix of all the variables in the dataset
 
+```{r}
 pairs(learning2014)
+```
 
 drawing another same scatter plot excluding gender variable
 
+```{r}
 pairs(learning2014[-1])
 
+
 pairs(learning2014[-1], col = learning2014$gender)
+```
 
 accessing the GGally library to draw more advanced plots
 
+```{r}
 library(GGally)
+``` 
 
 creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another 
 
+```{r}
 p <- ggpairs(learning2014)
 p
+```
 
 As can be seen from the plot most variables have noramal distribution except "age", the distribution of which is positively skewed. The distribution of "Points" is also skewed negatively.  
 
@@ -49,15 +67,21 @@ As can be seen from the plot most variables have noramal distribution except "ag
 
 So, now let's now look at the scatter plot of points versus attitude
 
+```{r}
 qplot(Attitude, Points, data = learning2014) + geom_smooth(method = "lm")
+```
 
 And, now let's fit a linear model, and call it 'my_model'
 
+```{r}
 my_model <- lm(Points ~ Attitude, data = learning2014)
+```
 
 Now, let's print out a summary of the model
 
+```{r}
 summary(my_model)
+```
 
 The summary indicates that there is a statistically significant positive relationship between Attitude and Points, with P-value of under 0.001. Also F-statistics of the model is high enough. 
 
@@ -65,10 +89,14 @@ Other variables which display positive correlations are, e.g., "Attitude" and "d
 
 creating a more advanced plot matrix with ggpairs
 
+```{r}
 p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap ("facethist", bins = 20)))
+```
 
 drawing the new plot
+```{r}
 p
+```
 
 This new plot shows differences between males and females in blueish and pinkish color, respectively. It also shows box plots of the variables for both males and females. 
 
@@ -78,22 +106,31 @@ As an example, we can now see that attitude of male students toward learning sta
 
 Creating a regression model with multiple explanatory variables (multiple regression). I use Points as the dependent variable (y), and Attitude, surface learning, and strategic learning as explanatory variables (X).
 
+```{r}
 my_model2 <- lm(Points ~ Attitude + stra + surf, data = learning2014)
+```
 
 printg out a summary of the model
 
+```{r}
 summary(my_model2)
+```
 
 As the summary of the model indicates, only Attitude has a statistically significant relationship with Points.
 
 Now, let's remove surface learning from the model, and call it my_model3
+
+```{r}
 my_model3 <- lm(Points ~ Attitude + stra, data = learning2014)
+```
 
 # 4. Summary of the multiple regression model
 
 Let's print out the new model
 
+```{r}
 summary(my_model3)
+```
 
 the model shows that still only attitude is siginificant. However, now the p-value of 'stra' is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance. 
 
@@ -105,14 +142,18 @@ R-squared of the model is ~ 0.20, which indicates that around 20 percent of the 
 
 Producing diagnostic plots
 
+```{r}
 plot(my_model3, which = c(1,2,5))
+```
 
 Now plots of Residuals vs. Fitted values (1), Normal QQ-plot (2), and Residuals vs. Leverage have been produced.
 
 Now, let's place all the above graphs to the same plots
 
+```{r}
 par(mfrow = c(2,2))
 plot(my_model3, which = c(1,2,5))
+```
 
 What do these plots indicate? Let's first explore "Residuls vs Fitted values". This plot is used to understand the linearity of the model, the unequality of error variance, and if there is any outliers. Looking at the plot reveals that the residuals are scattered rather randolmy around 0, and have formed a horizontal line, meaning that the relationship of the variables in our model is linear and also the errors are equal. Only there are some values that are far from the rest (lower side of the plot); these could be considered as outliers. How influential they are in our model will be determined by another plot, which we will look at soon. 
 
