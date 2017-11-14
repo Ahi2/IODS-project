@@ -14,3 +14,6 @@ dim(learning2014)
 
 # looking at the structure of the data
 str(learning2014)
+
+# Accessing the ggplot2 library for displaying plots of data
+library(ggplot2)
