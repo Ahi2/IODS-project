@@ -39,22 +39,25 @@ drawing a scatter plot matrix of all the variables in the dataset
 pairs(learning2014)
 ```
 
-drawing another same scatter plot excluding gender variable
+Drawing another same scatter plot excluding gender variable
 
 ```{r}
 pairs(learning2014[-1])
+```
 
+Coloring the variable "gender""
 
+```{r}
 pairs(learning2014[-1], col = learning2014$gender)
 ```
 
-accessing the GGally library to draw more advanced plots
+Accessing the GGally library to draw more advanced plots
 
 ```{r}
 library(GGally)
 ``` 
 
-creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another 
+Creating a plot matrix with ggpair, where we can see the distribution of the variables and their correlation with one another 
 
 ```{r}
 p <- ggpairs(learning2014)
@@ -87,13 +90,13 @@ The summary indicates that there is a statistically significant positive relatio
 
 Other variables which display positive correlations are, e.g., "Attitude" and "deep learning", "strategic learning" and "Age". Unsurprisingly, there is a negative correlation (-0.32) between "surface learning" and "deep learning".
 
-creating a more advanced plot matrix with ggpairs
+Creating a more advanced plot matrix with ggpairs
 
 ```{r}
 p <- ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap ("facethist", bins = 20)))
 ```
 
-drawing the new plot
+Drawing the new plot
 ```{r}
 p
 ```
@@ -110,7 +113,7 @@ Creating a regression model with multiple explanatory variables (multiple regres
 my_model2 <- lm(Points ~ Attitude + stra + surf, data = learning2014)
 ```
 
-printg out a summary of the model
+Printg out a summary of the model
 
 ```{r}
 summary(my_model2)
@@ -132,7 +135,7 @@ Let's print out the new model
 summary(my_model3)
 ```
 
-the model shows that still only attitude is siginificant. However, now the p-value of 'stra' is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance. 
+The model shows that still only attitude is siginificant. However, now the p-value of 'stra' is smaller (0.08).This value is smaller than 0.1, which is sometimes considered to indicate the statistical significance. 
 
 The model shows that "Attitude"" is positively and strongly correlates with "Points". As explained earlier, this is reasonable, because those who have a more positive attitude toward sttistical learning will be more likely to receive a higher point (in a statstics test, e.g.). Also, there is a positive correlation between strategic learning and points students have received. This makes sense, too. The more strategic thinking oriented students are, the higher the probability of receiving a better grade. But the correlation is weak, yet could be considered significant.
 
