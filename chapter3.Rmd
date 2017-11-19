@@ -1,0 +1,19 @@
+---
+title: "chapter3.Rmd"
+author: "Ahi"
+date: "19 marraskuuta 2017"
+output: html_document
+---
+
+# 2. Reading the joined dataset
+
+```{r}
+read.table("C:/Data/IODS-project/alc.csv", sep=";", header=TRUE)
+```
+
+This is a dataset which contains information on students achievment in two classes, math and Portuguese language. The aim is to see, e.g., how alocohol consumtpion and gender affect students' performance. The name of the variables used can be seen here:
+
+```{r}
+colnames(alc)
+```
+
