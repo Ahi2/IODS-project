@@ -46,3 +46,39 @@ g4 <- ggplot(alc, aes(x = high_use, y = age)) + ggtitle("Student age by alcohol 
 g4 + geom_boxplot() + ylab("age")
 ```
 
+# 5. Logistic regression
+
+looking at the logistic model, where alcohol consumption is the depedent variables, which is binory (0 and 1), and gender, health, age, and grade are independent variables. 
+```{r}
+m <- glm(high_use ~ sex + G3 + health + age, data = alc, family = "binomial")
+```
+
+printing out the model:
+```{r}
+m
+```
+
+coefficients and the summary of the model
+
+```{r}
+coef(m)
+summary(m)
+```
+Computing odds ratios (OR)
+
+```{r}
+OR <- coef(m) %>% exp
+```
+
+computing confidence intervals (CI)
+
+```{r}
+CI <- confint(m) %>% exp
+```
+Printing out the odds ratios with their confidence intervals
+```{r}
+cbind(OR, CI)
+```
+As can be seen from the results, the gender has the widest confidence interval. 
+
+
