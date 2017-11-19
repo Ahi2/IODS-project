@@ -81,4 +81,53 @@ cbind(OR, CI)
 ```
 As can be seen from the results, the gender has the widest confidence interval. 
 
+# 6. Exploring the predictive power of the model
+
+Using the variables which were statistically signifacnt in a model called m2 
+```{r}
+m2 <- glm(high_use ~ sex + G3 + age, data = alc, family = "binomial")
+```
+
+looking at the predictive power of m2
+
+```{r}
+probabilities <- predict(m, type = "response")
+```
+
+adding the  predicted probabilities to 'alc'
+```{r}
+alc <- mutate(alc, probability = probabilities)
+```
+
+using the probabilities to make a prediction of high_use
+```{r}
+alc <- mutate(alc, prediction = probability > 0.5)
+```
+
+Looking at the last ten original classes, predicted probabilities, and class predictions
+```{r}
+select(alc, sex, G3, age, high_use, probability, prediction) %>% tail(10)
+```
+
+tabulating the target variable versus the predictions
+```{r}
+table(high_use = alc$high_use, prediction = alc$prediction)
+```
+
+displaying the actual values and the predictions
+```{r}
+g <- ggplot(alc, aes(x = probability, y = high_use, col = prediction))
+
+g + geom_point()
+```
+
+Computing the total proportion of inaccurately classified individuals 
+```{r}
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+
+loss_func(class = alc$high_use, prob = alc$probability)
+```
 
