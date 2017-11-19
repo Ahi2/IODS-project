@@ -17,3 +17,5 @@ This is a dataset which contains information on students achievment in two class
 colnames(alc)
 ```
 
+Now we want to study the effect of students' age, number of class failures, health, and absences from the class on students' alcohol consumption. I hypothesize that, except for health, there is a positive relationship between these variables and alcohol consumption. For the health, the relationship is expected to be negative.
+
