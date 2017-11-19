@@ -5,6 +5,10 @@ date: "19 marraskuuta 2017"
 output: html_document
 ---
 
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
 # 2. Reading the joined dataset
 
 ```{r}
@@ -17,5 +21,28 @@ This is a dataset which contains information on students achievment in two class
 colnames(alc)
 ```
 
-Now we want to study the effect of students' age, number of class failures, health, and absences from the class on students' alcohol consumption. I hypothesize that, except for health, there is a positive relationship between these variables and alcohol consumption. For the health, the relationship is expected to be negative.
+# 3. The hypotheses regarding four variables and alc consumption
+
+Now we want to study the effect of students' gender, age, health, and final grade (G3) on students' alcohol consumption...we use high_consumption as the dependent variable...
+
+# 4. exploring the distribution of the variables 
+Let's look at the disribution of the variables selected:
+
+```{r}
+g1 <- ggplot(data = alc, aes(x = high_use)) + facet_wrap("sex")
+
+g1 + geom_bar()
+
+g2 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
+
+g2 + geom_boxplot() + ylab("grade")
+
+g3 <- ggplot(alc, aes(x = high_use, y = health, col = sex)) + ggtitle("Student health by alcohol consumption and sex")
+
+g3 + geom_boxplot() + ylab("health")
+
+g4 <- ggplot(alc, aes(x = high_use, y = age)) + ggtitle("Student age by alcohol consumption")
+
+g4 + geom_boxplot() + ylab("age")
+```
 
