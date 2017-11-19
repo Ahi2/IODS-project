@@ -39,4 +39,12 @@ for(column_name in notjoined_columns) {
 
 glimpse(alc)
 
+library(ggplot2)
 
+alc <- mutate(alc, alc_use = (Dalc + Walc) / 2)
+
+alc <- mutate(alc, high_use = alc_use > 2)
+
+
+
+  
