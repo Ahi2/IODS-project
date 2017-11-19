@@ -18,3 +18,25 @@ math_por <- inner_join(math, por, by = join_by, suffix = c(".math", ".por"))
 
 colnames(math_por)
 glimpse(math_por)
+
+colnames(math_por)
+
+alc <- select(math_por, one_of("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet"))
+
+notjoined_columns <- colnames(math)[!colnames(math) %in% join_by]
+
+notjoined_columns
+
+for(column_name in notjoined_columns) {
+  two_columns <-  select(math_por, starts_with(column_name))
+  first_column <- select(two_columns, 1)[[1]]
+  if(is.numeric(first_column)) {
+    alc[column_name] <- round(rowMeans(two_columns))
+  } else {
+    alc[column_name] <- (first_column)
+  }
+}
+
+glimpse(alc)
+
+
