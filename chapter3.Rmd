@@ -6,7 +6,9 @@ output: html_document
 ---
 
 library(tidyr)
+
 library(dplyr)
+
 library(ggplot2)
 
 # 2. Reading the joined dataset
@@ -29,10 +31,13 @@ Now we want to study the effect of students' gender, age, health, and final grad
 Let's look at the disribution of the variables selected:
 
 ```{r}
-g1 <- ggplot(data = alc, aes(x = high_use)) + facet_wrap("sex")
+g1 <- ggplot(alc, aes(x = high_use)) + facet_wrap("sex")
 
 g1 + geom_bar()
 
+```
+
+```{r}
 g2 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
 
 g2 + geom_boxplot() + ylab("grade")
@@ -166,5 +171,65 @@ cv$delta[1]
 ```
 
 As can be seen, now the predictive error of the model is smaller than the previous models. It is however the same as the one in the DataCamp exercise.
+
+So, let's modify our hypotheses and develop new logistic model - with different variables - to test whether our model improves. Accordingly, in the follwing, I introduce explanatory variables to the model, while keeping the dependent variables (high_use) the same. I start with large number of variables and continue with smaller number.
+
+m5 - explanatory variables: sex, age, studytime, failures, famsup, goout (going out with friends), famrel (quality of family relationship), health, and absences.
+
+```{r}
+m5 <- glm(high_use ~ sex + age + studytime + failures + famsup + goout + famrel + health + absences, data = alc, family = "binomial") 
+```
+
+Now, let's look at a summary of the model as well as the coefficients.
+```{r}
+summary(m5)
+
+coef(m5)
+```
+
+Let us now look at the predictive power of the model, by estimating the prediction error:
+```{r}
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m5, K = 10)
+cv$delta[1]
+```
+
+As the model summary reveals, the variables, sex, studytime, goout, famrel, and absences have statistically significant relationship with alocohol consumption (high_use). Also, the prediction error of the model now is smaller than previous models. It is also smaller than the model in the DataCamp. Therefore, this is a better model in general.
+
+Now let us look at the boxplot of some of the variables in the model:
+
+```{r}
+g5 <- ggplot(alc, aes(x = high_use, y = studytime, col = sex)) + ggtitle("Student study time and by alcohol consumption and sex")
+
+g5 + geom_boxplot() + ylab("study time")
+
+g6 <- ggplot(alc, aes(x = high_use, y = famrel, col = sex))
+
+g6 + geom_boxplot() + ylab("family relationship")
+```
+
+Now let's make the model even better by keeping only significant predictors (reducing variables), and call it m6. 
+
+```{r}
+m6 <- glm(high_use ~ sex + studytime + goout + famrel + absences, data = alc, family = "binomial")
+
+summary(m6)
+
+coef(m6)
+
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m6, K = 10)
+cv$delta[1]
+```
+
+As the result shows now the predictive error of the model is smaller, hence a better model. All the variables in this model are now significant. The relationships of these variables can be explaiend as follows:
+
+Sex (gender) is positively related to alcohol consumprion; stated differently, male students are more likely to consume high amount of alcohol, compared to to female students. 
+
+study time is negatively correlated with high alcohol consumption. This makes sense, as the more students drink alcohol the less they spend time studying. 
+
+Going out with friends (gout) is positively and highly correlated with high alcohol consumption. This is not surprising as those students who go our with their friends ore often are more likely to drink high amount of alcohol. 
+
+Interesingly, and as expected, quality of family relationship (famrel) is negatively correlated with high alcohol consumption. This means that students living with a supportive family, wherein they enjoy quality relationship, are less likely to drink high amount of alocohol. For example, when facing with stressful circumstances, instead of drinking, they may socialize with their family members, which helps reduce stress.
+
+Finally, as also anticipated, the number of school absences are positively correlated with alcohol consumption. For instance, hangover in the morning may be one reason for high number of absences. 
 
 
