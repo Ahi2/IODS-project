@@ -130,15 +130,41 @@ loss_func <- function(class, prob) {
 
 loss_func(class = alc$high_use, prob = alc$probability)
 ```
+ 
+# 7 and 8. Performing cross-validation to compare different models
 
-
-Comparing the performance of the model by computing the average number of wrong predictions in the training data:
+library(boot)
 ```{r}
-loss_func <- function(class, prob) {
-  n_wrong <- abs(class - prob) > 0.5
-  mean(n_wrong)
-}
-
-loss_func(class = alc$high_use, prob = alc$probability)
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m, K = 10)
+cv$delta[1]
 ```
+After performing this 10-fold crosss-validation test, we can see that the prediction error is larger than the model in the DataCamp (~ 0.29 > 0.26). Therefore, it seems that this model does not perform better. Let's now use m2 model, in which one of the variables (health) that was insignificant is removed.
+
+```{r}
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m2, K = 10)
+cv$delta[1]
+```
+Though the prediction error of this model is slightly better than the other one (m1), it still is larger than the one in DataCamp. So, let's remove the variable "age", and keep only the "sex" and "G3", which are more significant statistically. Let's call the model, m3:
+
+```{r}
+m3 <- glm(high_use ~ sex + G3, data = alc, family = "binomial")
+```
+
+Now, let's look at the prediction error of m3:
+
+```{r}
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m3, K = 10)
+cv$delta[1]
+```
+Still the prediction error is larger. So, let's introduce new variables to the model: absences and sex, and remove G3.   
+
+```{r}
+m4 <- glm(high_use ~ sex + absences, data = alc, family = "binomial")
+
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m4, K = 10)
+cv$delta[1]
+```
+
+As can be seen, now the predictive error of the model is smaller than the previous models. It is however the same as the one in the DataCamp exercise.
+
 
