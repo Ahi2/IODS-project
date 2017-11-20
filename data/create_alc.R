@@ -52,3 +52,5 @@ glimpse(math_por)
 write.csv(alc, file = "C:/Data/IODS-project/alc.csv", row.names = TRUE)
 
 write.csv(math_por, file = "C:/Data/IODS-project/math_por.csv", row.names = TRUE)
+
+
