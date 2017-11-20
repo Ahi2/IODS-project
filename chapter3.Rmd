@@ -17,7 +17,7 @@ library(ggplot2)
 alc <- read.table("C:/Data/IODS-project/alc.csv", sep=",", header=TRUE)
 ```
 
-This is a dataset which contains information on students achievment in two classes, math and Portuguese language. The aim is to see, e.g., how alocohol consumtpion and gender affect students' performance. The name of the variables used can be seen here:
+This is a dataset which contains information on students achievment in two classes, math and Portuguese language. The aim is to see, e.g., how alocohol consumtpion and gender affect students' performance. The name of the variables in the dataset can be seen here:
 
 ```{r}
 colnames(alc)
@@ -25,30 +25,46 @@ colnames(alc)
 
 # 3. The hypotheses regarding four variables and alc consumption
 
-Now we want to study the effect of students' gender, age, health, and final grade (G3) on students alcohol consumption...we use high_consumption as the dependent variable...
+In this exercise, I am interested in studying the effect of students' gender, age, health, and final grade (G3) on students alcohol consumption. Since the dependent variable is categorical (high vs. low consumption), logistic regression analysis is used. The following are my hypotheses:
+
+H1. Male studnets are more likely to consume high amount of alcohol compared with their female classmates
+
+H2. There is a positive relationship between age and alcohol consumption. As such, the older the
+students the higher the likelihood of high alcohol consumption.
+
+H3. There is a negative relationship between students' health and high alcohol consumption.
+
+H4. There is a negative relationship between students' grades and high alcohol consumption. 
 
 # 4. exploring the distribution of the variables 
+
 Let's look at the disribution of the variables selected:
 
 ```{r}
-g1 <- ggplot(alc, aes(x = high_use)) + facet_wrap("sex")
+alc %>% group_by(sex, high_use) %>% summarise(count = n(), mean_grade = mean(G3))
+```
 
-g1 + geom_bar()
+Now we can see that the number of female students who have not drunk high amount of alcohol (False) is larger than those who have (True), and the grade of the former group is slightly higher than that of the latter. The same holds true for male students; the difference is that the number of male students who reprted high alcohol consumption is larger than that of female students, and the difference between thei grades are more significant (~ 10.27 for those who drink, and ~ 12.2 for those who do not).  
+
+Now let's look at some boxplot of the variables
+```{r}
+g1 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
+  
+
+g1 + geom_boxplot() + ylab("grade")
 
 ```
 
 ```{r}
-g2 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
+g2 <- ggplot(alc, aes(x = high_use, y = health, col = sex)) + ggtitle("Student health by alcohol consumption and sex")
 
-g2 + geom_boxplot() + ylab("grade")
+g2 + geom_boxplot() + ylab("health")
+```
 
-g3 <- ggplot(alc, aes(x = high_use, y = health, col = sex)) + ggtitle("Student health by alcohol consumption and sex")
+```{r}
+g3 <- ggplot(alc, aes(x = high_use, y = age)) + ggtitle("Student age by alcohol consumption")
 
-g3 + geom_boxplot() + ylab("health")
-
-g4 <- ggplot(alc, aes(x = high_use, y = age)) + ggtitle("Student age by alcohol consumption")
-
-g4 + geom_boxplot() + ylab("age")
+g3 + geom_boxplot() + ylab("age")
 ```
 
 # 5. Logistic regression
@@ -69,7 +85,8 @@ coefficients and the summary of the model
 coef(m)
 summary(m)
 ```
-Computing odds ratios (OR)
+
+Now, let us Compute odds ratios (OR)
 
 ```{r}
 OR <- coef(m) %>% exp
@@ -86,9 +103,19 @@ cbind(OR, CI)
 ```
 As can be seen from the results, the gender has the widest confidence interval. 
 
+Hypotheses test results:
+
+The results reveal that gender is a significant variable. According to this and the distribution of this variable, shown earlier, male studnets are more likely to drink high amount of alcohol. This confirms my 1st hypothesis.
+
+There is a positive and significant (though weak) relationship between students' age and high c=alcohol consumption, confirming the 2nd hypothesis.
+
+There is no relationship between students' health and high alcohol consumption, rejecting the 3rd hypothesis. This is could be due to the fact that students are very younge, hence alcoholc consumption does not affect their health yet.
+
+There is a negative, significant relationship between students' grade and high alcohol consumption, confirming the 4th hypothesis.  
+
 # 6. Exploring the predictive power of the model
 
-Using the variables which were statistically signifacnt in a model called m2 
+Using the variables which were statistically signifacnt in the previous model, hence removing "health". Let's call this m2.
 ```{r}
 m2 <- glm(high_use ~ sex + G3 + age, data = alc, family = "binomial")
 ```
@@ -96,7 +123,7 @@ m2 <- glm(high_use ~ sex + G3 + age, data = alc, family = "binomial")
 looking at the predictive power of m2
 
 ```{r}
-probabilities <- predict(m, type = "response")
+probabilities <- predict(m2, type = "response")
 ```
 
 adding the  predicted probabilities to 'alc'
@@ -143,13 +170,8 @@ library(boot)
 cv <- cv.glm(data = alc, cost = loss_func, glmfit = m, K = 10)
 cv$delta[1]
 ```
-After performing this 10-fold crosss-validation test, we can see that the prediction error is larger than the model in the DataCamp (~ 0.29 > 0.26). Therefore, it seems that this model does not perform better. Let's now use m2 model, in which one of the variables (health) that was insignificant is removed.
-
-```{r}
-cv <- cv.glm(data = alc, cost = loss_func, glmfit = m2, K = 10)
-cv$delta[1]
-```
-Though the prediction error of this model is slightly better than the other one (m1), it still is larger than the one in DataCamp. So, let's remove the variable "age", and keep only the "sex" and "G3", which are more significant statistically. Let's call the model, m3:
+After performing this 10-fold crosss-validation test, we can see that the prediction error is larger than the model in the DataCamp (~ 0.28 > 0.26). Therefore, it seems that this model does not perform better.
+So, let's remove the variable "age", and keep only the "sex" and "G3", which are more significant statistically. Let's call the model, m3:
 
 ```{r}
 m3 <- glm(high_use ~ sex + G3, data = alc, family = "binomial")
@@ -161,7 +183,7 @@ Now, let's look at the prediction error of m3:
 cv <- cv.glm(data = alc, cost = loss_func, glmfit = m3, K = 10)
 cv$delta[1]
 ```
-Still the prediction error is larger. So, let's introduce new variables to the model: absences and sex, and remove G3.   
+Still the prediction error is large. So, let's introduce new variables to the model: absences and sex, and remove G3.   
 
 ```{r}
 m4 <- glm(high_use ~ sex + absences, data = alc, family = "binomial")
@@ -172,7 +194,7 @@ cv$delta[1]
 
 As can be seen, now the predictive error of the model is smaller than the previous models. It is however the same as the one in the DataCamp exercise.
 
-So, let's modify our hypotheses and develop new logistic model - with different variables - to test whether our model improves. Accordingly, in the follwing, I introduce explanatory variables to the model, while keeping the dependent variables (high_use) the same. I start with large number of variables and continue with smaller number.
+So, let's modify our hypotheses and develop a new logistic regression model - with different variables - to test whether or ot our model improves. Accordingly, in the follwing, I introduce explanatory variables to the model, while keeping the dependent variables (high_use) the same. I start with a large number of variables and continue with smaller number.
 
 m5 - explanatory variables: sex, age, studytime, failures, famsup, goout (going out with friends), famrel (quality of family relationship), health, and absences.
 
@@ -220,16 +242,15 @@ cv <- cv.glm(data = alc, cost = loss_func, glmfit = m6, K = 10)
 cv$delta[1]
 ```
 
-As the result shows now the predictive error of the model is smaller, hence a better model. All the variables in this model are now significant. The relationships of these variables can be explaiend as follows:
+As the result shows now the predictive error of the model is smaller (~ 0.22), hence a better model. All the variables in this model are now significant. The relationships of these variables can be explaiend as follows:
 
-Sex (gender) is positively related to alcohol consumprion; stated differently, male students are more likely to consume high amount of alcohol, compared to to female students. 
+Sex (gender) is positively related to alcohol consumprion; stated differently, male students are more likely to consume high amount of alcohol, compared with female students. 
 
-study time is negatively correlated with high alcohol consumption. This makes sense, as the more students drink alcohol the less they spend time studying. 
+Study time is negatively correlated with high alcohol consumption. This is logical. The more students drink alcohol the less they spend their time studying. 
 
-Going out with friends (gout) is positively and highly correlated with high alcohol consumption. This is not surprising as those students who go our with their friends ore often are more likely to drink high amount of alcohol. 
+Going out with friends (gout) is positively and highly correlated with high alcohol consumption. This is not surprising as those students who go out with their friends more often are more likely to drink high amount of alcohol. 
 
-Interesingly, and as expected, quality of family relationship (famrel) is negatively correlated with high alcohol consumption. This means that students living with a supportive family, wherein they enjoy quality relationship, are less likely to drink high amount of alocohol. For example, when facing with stressful circumstances, instead of drinking, they may socialize with their family members, which helps reduce stress.
+Interesingly, and as expected, quality of family relationship (famrel) is negatively correlated with high alcohol consumption. This means that students living with a supportive family, wherein they enjoy good social relationship, are less likely to drink high amount of alocohol. For example, when facing with stressful circumstances, instead of drinking, they may socialize with their family members, which helps reduce stress.
 
 Finally, as also anticipated, the number of school absences are positively correlated with alcohol consumption. For instance, hangover in the morning may be one reason for high number of absences. 
-
 
