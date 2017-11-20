@@ -25,7 +25,7 @@ colnames(alc)
 
 # 3. The hypotheses regarding four variables and alc consumption
 
-Now we want to study the effect of students' gender, age, health, and final grade (G3) on students' alcohol consumption...we use high_consumption as the dependent variable...
+Now we want to study the effect of students' gender, age, health, and final grade (G3) on students alcohol consumption...we use high_consumption as the dependent variable...
 
 # 4. exploring the distribution of the variables 
 Let's look at the disribution of the variables selected:
