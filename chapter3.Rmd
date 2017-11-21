@@ -5,11 +5,19 @@ date: "19 marraskuuta 2017"
 output: html_document
 ---
 
+# Exercise 3. Logistic Regression 
+
+In this exercise, I am going to perform logistic regressoin to see the effect of different variabes on students' alcohol consumption. I have combined Math-Por dataset and called alc, which includes data from students in both mathematics and Portugies classes. First, let us run some of the libraries we need. 
+
+```{r}
 library(tidyr)
 
 library(dplyr)
 
 library(ggplot2)
+
+library(magrittr)
+```
 
 # 2. Reading the joined dataset
 
@@ -69,7 +77,7 @@ g3 + geom_boxplot() + ylab("age")
 
 # 5. Logistic regression
 
-looking at the logistic model, where alcohol consumption is the depedent variables, which is binory (0 and 1), and gender, health, age, and grade are independent variables. 
+In this section,let us look at the logistic model, wherein alcohol consumption is the depedent variables, which is binery (0 and 1), while gender, health, age, and grade are independent variables. 
 ```{r}
 m <- glm(high_use ~ sex + G3 + health + age, data = alc, family = "binomial")
 ```
@@ -107,9 +115,9 @@ Hypotheses test results:
 
 The results reveal that gender is a significant variable. According to this and the distribution of this variable, shown earlier, male studnets are more likely to drink high amount of alcohol. This confirms my 1st hypothesis.
 
-There is a positive and significant (though weak) relationship between students' age and high c=alcohol consumption, confirming the 2nd hypothesis.
+There is a positive and significant (though weak) relationship between students' age and high alcohol consumption, confirming the 2nd hypothesis.
 
-There is no relationship between students' health and high alcohol consumption, rejecting the 3rd hypothesis. This is could be due to the fact that students are very younge, hence alcoholc consumption does not affect their health yet.
+There is no relationship between students' health and high alcohol consumption, rejecting my 3rd hypothesis. This could be due to the fact that students are very young, hence alcoholc consumption does not affect their health yet.
 
 There is a negative, significant relationship between students' grade and high alcohol consumption, confirming the 4th hypothesis.  
 
@@ -165,8 +173,9 @@ loss_func(class = alc$high_use, prob = alc$probability)
  
 # 7 and 8. Performing cross-validation to compare different models
 
-library(boot)
+
 ```{r}
+library(boot)
 cv <- cv.glm(data = alc, cost = loss_func, glmfit = m, K = 10)
 cv$delta[1]
 ```
@@ -215,7 +224,7 @@ cv <- cv.glm(data = alc, cost = loss_func, glmfit = m5, K = 10)
 cv$delta[1]
 ```
 
-As the model summary reveals, the variables, sex, studytime, goout, famrel, and absences have statistically significant relationship with alocohol consumption (high_use). Also, the prediction error of the model now is smaller than previous models. It is also smaller than the model in the DataCamp. Therefore, this is a better model in general.
+As the model summary reveals, the variables, sex, studytime, goout, famrel, and absences have statistically significant relationship with alcohol consumption (high_use). Also, the prediction error of the model now is smaller than previous models. It is also smaller than the model in the DataCamp. Therefore, this is a better model in general.
 
 Now let us look at the boxplot of some of the variables in the model:
 
@@ -242,13 +251,13 @@ cv <- cv.glm(data = alc, cost = loss_func, glmfit = m6, K = 10)
 cv$delta[1]
 ```
 
-As the result shows now the predictive error of the model is smaller (~ 0.22), hence a better model. All the variables in this model are now significant. The relationships of these variables can be explaiend as follows:
+As the results show now the predictive error of the model is smaller (~ 0.22), hence a better model. All the variables in this model are now significant. The relationships of these variables can be explaiend as follows:
 
 Sex (gender) is positively related to alcohol consumprion; stated differently, male students are more likely to consume high amount of alcohol, compared with female students. 
 
 Study time is negatively correlated with high alcohol consumption. This is logical. The more students drink alcohol the less they spend their time studying. 
 
-Going out with friends (gout) is positively and highly correlated with high alcohol consumption. This is not surprising as those students who go out with their friends more often are more likely to drink high amount of alcohol. 
+Going out with friends (gout) is positively and highly correlated with high alcohol consumption. This is not surprising, as those students who go out with their friends more often, are more likely to drink high amount of alcohol. 
 
 Interesingly, and as expected, quality of family relationship (famrel) is negatively correlated with high alcohol consumption. This means that students living with a supportive family, wherein they enjoy good social relationship, are less likely to drink high amount of alocohol. For example, when facing with stressful circumstances, instead of drinking, they may socialize with their family members, which helps reduce stress.
 
