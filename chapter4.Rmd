@@ -50,3 +50,46 @@ corrplot(cor_matrix, method="circle", type = "upper", cl.pos = "b", tl.pos = "d"
 
 As examples, we can see that there is a strong and positive relationship between "rad" (index of accessibility to radial highways) and "tax" (full-value property-tax rate per \$10,000). In addition, there is a negtive and strong relationship between "lstat" (lower status of the population (percent)) and "medv" (median value of owner-occupied homes in \$1000s). 
 
+# Standardizing the dataset
+
+```{r}
+boston_scaled <- scale(Boston)
+summary(boston_scaled)
+class(boston_scaled)
+boston_scaled <- as.data.frame(boston_scaled)
+```
+
+Creating a categorical variable of the crime rate in the Boston dataset. First, let's create a quantile vector of crime rate.
+
+```{r}
+bins <- quantile(boston_scaled$crim)
+bins
+```
+
+Now, let's create a categorical variable, and call it, 'crime':
+```{r}
+crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE, c(label = "low", "med_low", "med_high", "high"))
+table(crime)
+```
+
+Now, let's remove the original crim from the dataset
+```{r}
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+```
+
+And add the new categorical value to scaled data
+```{r}
+boston_scaled <- data.frame(boston_scaled, crime)
+```
+
+Dividing the dataset to train and test sets, so that 80% of the data belongs to the train set. 
+```{r}
+n <- nrow(boston_scaled)
+ind <- sample(n,  size = n * 0.8)
+train <- boston_scaled[ind,]
+test <- boston_scaled[-ind,]
+correct_classes <- test$crime
+test <- dplyr::select(test, -crime)
+```
+
+
