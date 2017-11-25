@@ -1,0 +1,52 @@
+---
+title: "chapter4.Rmd"
+author: "Ahi"
+date: "25 marraskuuta 2017"
+output: html_document
+---
+
+```{r}
+library(tidyr)
+library(ggplot2)
+library(corrplot)
+library(GGally)
+```
+
+# 2. Loading the Boston data and exploring the data
+
+```{r}
+library(MASS)
+data("Boston")
+str(Boston)
+summary(Boston)
+```
+
+According to the structure of the data, Boston dataset, which is already loaded in R, has 506 observattions (rows) and 14 variables (columns). The data are mainly gathered to understand the effect of housing values in suburbs of Boston on different vairbles such as crime rate.  
+
+# Graphical overview of the data and summary of variables 
+
+```{r}
+pairs(Boston)
+```
+
+The plot above shows the correlations of all the variables in the dataset. But let's look at a more advanced plot to see the distribution of the data as well as correlation of the variables.
+
+```{r}
+p <- ggpairs(Boston, mapping = aes(alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+p
+```
+
+The plot above demonstrates the distribution of the data as well as the corrlations. As an example, data in the variable "rm", average number of room per dwelling, have normal distribution, and there is a positive, and rather strong, correlation between "zn" (proportion of residential land zoned for lots over 25,000 sq.ft.), and "dis" (weighted mean of distances to five Boston employment centres).
+
+But we can look at the corraltions with more r funcations. Let's explore cor_matrix function, which provides handy, easy-to-interpret-correlation matrix. 
+
+```{r}
+cor_matrix<-cor(Boston) %>% round(digit=2)
+
+cor_matrix %>% round(cor_matrix)
+
+corrplot(cor_matrix, method="circle", type = "upper", cl.pos = "b", tl.pos = "d", tl.cex = 0.6)
+```
+
+As examples, we can see that there is a strong and positive relationship between "rad" (index of accessibility to radial highways) and "tax" (full-value property-tax rate per \$10,000). In addition, there is a negtive and strong relationship between "lstat" (lower status of the population (percent)) and "medv" (median value of owner-occupied homes in \$1000s). 
+
