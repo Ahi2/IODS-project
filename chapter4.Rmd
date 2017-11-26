@@ -23,7 +23,7 @@ summary(Boston)
 
 According to the structure of the data, Boston dataset, which is already loaded in R, has 506 observattions (rows) and 14 variables (columns). The data are mainly gathered to understand the effect of housing values in suburbs of Boston on different vairbles such as crime rate.  
 
-# Graphical overview of the data and summary of variables 
+# 3. Graphical overview of the data and summary of variables 
 
 ```{r}
 pairs(Boston)
@@ -36,7 +36,7 @@ p <- ggpairs(Boston, mapping = aes(alpha = 0.3), lower = list(combo = wrap("face
 p
 ```
 
-The plot above demonstrates the distribution of the data as well as the corrlations. As an example, data in the variable "rm", average number of room per dwelling, have normal distribution, and there is a positive, and rather strong, correlation between "zn" (proportion of residential land zoned for lots over 25,000 sq.ft.), and "dis" (weighted mean of distances to five Boston employment centres).
+The above plot demonstrates the distribution of the data as well as the correlations of the variables. As an example, data in the variable "rm", average number of room per dwelling, have normal distribution, and there is a positive, and rather strong, correlation between "zn" (proportion of residential land zoned for lots over 25,000 sq.ft.), and "dis" (weighted mean of distances to five Boston employment centres).
 
 But we can look at the corraltions with more r funcations. Let's explore cor_matrix function, which provides handy, easy-to-interpret-correlation matrix. 
 
@@ -48,9 +48,9 @@ cor_matrix %>% round(cor_matrix)
 corrplot(cor_matrix, method="circle", type = "upper", cl.pos = "b", tl.pos = "d", tl.cex = 0.6)
 ```
 
-As examples, we can see that there is a strong and positive relationship between "rad" (index of accessibility to radial highways) and "tax" (full-value property-tax rate per \$10,000). In addition, there is a negtive and strong relationship between "lstat" (lower status of the population (percent)) and "medv" (median value of owner-occupied homes in \$1000s). 
+Let's explore some examples. We can see that there is a strong and positive relationship between "rad" (index of accessibility to radial highways) and "tax" (full-value property-tax rate per \$10,000). In addition, there is a negtive and strong relationship between "lstat" (lower status of the population (percent)) and "medv" (median value of owner-occupied homes in \$1000s). 
 
-# Standardizing the dataset
+# 4. Standardizing the dataset
 
 ```{r}
 boston_scaled <- scale(Boston)
@@ -72,7 +72,7 @@ crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE, c(label =
 table(crime)
 ```
 
-Now, let's remove the original crim from the dataset
+Now, let's remove the original "crim"" from the dataset
 ```{r}
 boston_scaled <- dplyr::select(boston_scaled, -crim)
 ```
@@ -92,4 +92,31 @@ correct_classes <- test$crime
 test <- dplyr::select(test, -crime)
 ```
 
+# Fitting the linear discriminant analysis (LDA) on the train dataset 
+
+Use the crime as a target variable and all the other variables as predictors.
+```{r}
+lda.fit <- lda(crime ~ ., data = train)
+lda.fit
+```
+
+Drawing the LDA (bi)plot. But first let's create a numeric vector of the train sets crime classes.
+```{r}
+classes <- as.numeric(train$crime)
+```
+
+Now we're ready to draw the LDA plot.
+```{r}
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 3)
+```
 
