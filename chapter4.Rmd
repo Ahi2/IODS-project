@@ -5,12 +5,18 @@ date: "25 marraskuuta 2017"
 output: html_document
 ---
 
+Exercise 4: Clustering and classification
+
+In this exercise, we use Boston dara, already loaded in r. But, first let's access some libraries we will need during the exercise. 
+
 ```{r}
 library(tidyr)
 library(ggplot2)
 library(corrplot)
 library(GGally)
 ```
+
+After creating the RMarketdown file, we load and explore the Boston dataset. 
 
 # 2. Loading the Boston data and exploring the data
 
@@ -175,3 +181,27 @@ km <-kmeans(Boston, centers = 2)
 pairs(Boston, col = km$cluster)
 ```
 
+# Creating a 3D plot 
+```{r}
+model_predictors <- dplyr::select(train, -crime)
+```
+check the dimensions
+
+```{r}
+dim(model_predictors)
+dim(lda.fit$scaling)
+```
+
+matrix multiplication
+```{r}
+matrix_product <- as.matrix(model_predictors) %*% lda.fit$scaling
+matrix_product <- as.data.frame(matrix_product)
+```
+
+```{r}
+library(plotly)
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, col = crime, type= 'scatter3d', mode='markers')
+```
+```{r}
+plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, type= 'scatter3d', mode='markers', col = km$cluster)
+```
