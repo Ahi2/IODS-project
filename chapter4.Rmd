@@ -131,7 +131,47 @@ Cross tabulating the results by creating a table of the correct classes and the 
 ```{r}
 table(correct = correct_classes, predicted = lda.pred$class)
 ```
-The table above reveals that in most cases the crime rates have been predicted correctly, but there are some inconsistencies between the predicted results and correct ones. It seems that the class, high (crime rates) is the most precisely predicted one.
+The table above reveals that in most cases the crime rates have been predicted correctly, but there are some inconsistencies between the predicted results and correct ones. It seems that the class, high (crime rates), is the most precisely predicted one.
 
+# 7. Calculating the distances between the observations
 
+First, reloading and standardizing the dataset.
+```{r}
+data('Boston')
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+```
+
+Now, let's use dist() function to calculate the distances between observation using the most common distance measure, which is Euclidean distance.
+```{r}
+dist_eu <- dist(Boston)
+summary (dist_eu)
+```
+Now, let's use manhattan distance matrix, another distance measure.
+```{r}
+dist_man <- dist(Boston, method = "manhattan")
+summary(dist_man)
+```
+
+Now, we investigate the optimal number of clusters, using K-means clustering. First, we run K-means algorithm on the data. 
+```{r}
+km <-kmeans(Boston, centers = 4)
+pairs(Boston, col = km$cluster)
+```
+Now, we investigate the optimal number of clusters using K-means clustering, with 10 clusters. One way to specify the number of clusters is to look at how the total of within cluster sum of squares (WCSS) behaves when the number of cluster changes. So, let's look at the behavior of WCSS and plot it. 
+
+```{r}
+set.seed(123)
+k_max <- 10
+twcss <- sapply(1:k_max, function(k){kmeans(Boston, k)$tot.withinss})
+qplot(x = 1:k_max, y = twcss, geom = 'line')
+```
+
+By visualizing the total WCSS as a graph, we can see that two clusters would seem optimal. Becasue, the optimal number of clusters is when the value of total WCSS changes radically.  
+So, let's run k-means again with two clusters and then visualize the results.
+
+```{r}
+km <-kmeans(Boston, centers = 2)
+pairs(Boston, col = km$cluster)
+```
 
