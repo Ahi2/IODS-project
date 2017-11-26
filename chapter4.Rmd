@@ -92,7 +92,7 @@ correct_classes <- test$crime
 test <- dplyr::select(test, -crime)
 ```
 
-# Fitting the linear discriminant analysis (LDA) on the train dataset 
+# 5. Fitting the linear discriminant analysis (LDA) on the train dataset 
 
 Use the crime as a target variable and all the other variables as predictors.
 ```{r}
@@ -119,4 +119,19 @@ lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0
 plot(lda.fit, dimen = 2, col = classes, pch = classes)
 lda.arrows(lda.fit, myscale = 3)
 ```
+
+# 6. Predicting the classes with the LDA model
+
+In part 4, categorical crime variable has already been removed from the test dataset, and we have now the test data and correct class labels. Now, we predict the classes with the LDA model on the test data.
+```{r}
+lda.pred <- predict(lda.fit, newdata = test)
+```
+
+Cross tabulating the results by creating a table of the correct classes and the predicted ones.
+```{r}
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+The table above reveals that in most cases the crime rates have been predicted correctly, but there are some inconsistencies between the predicted results and correct ones. It seems that the class, high (crime rates) is the most precisely predicted one.
+
+
 
