@@ -55,7 +55,7 @@ write.csv(human, "c:/Data/IODS-project/human.csv")
 str(human)
 dim(human)
 
-# please ignore this part, as it belongs to the next week exercise :) 
+# please ignore the following, as it belongs to the next week exercise :) 
 
 #human <- mutate(human, GNI_capita = as.numeric(human$GNI_capita))
 
