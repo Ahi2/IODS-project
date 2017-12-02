@@ -39,5 +39,7 @@ cor(human2)
 cor(human2) %>% corrplot
 ```
 
+As can be seen from the correlations, for instance, adolescent birth rate (Ado.Birth) and Maternal mortality ratio (Mar.Mor) have a strong positive corrleation, which is unsuprising. Less supersing is the negative strong relationship between life expectancy at birth (Life.Exp) and Mat.Mor.
+
 
 
