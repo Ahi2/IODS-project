@@ -36,6 +36,7 @@ Now we look at the normal disctributions, correlationshs, and a graphical overvi
 ```{r}
 ggpairs(human2)
 ```
+
 As an example to explore the graph above, We can see that expected years of schooling (Edu.Exp) has almost a normal distrbution. We can also understand that there is quite a strong positive relationship between female/male ratio of secondary education (Edu2.Fm) and life expectancy at birth (Life.Exp).  
 
 Let us also look at the correlations of the variables.
@@ -57,6 +58,7 @@ biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"
 
 ```
 
+
 As can be seen from the graph above, when the variables are not standardized, the results are not promising. Now we have one dimension explaning the variance of the whole dataset. This is because PCA is an unsupervised method of dimension reduction technique. Second, PCA is sensitive to the relative scaling of the original variable, assuming that features with larger variace are more important than the ones with smaller variance. To address this issue, one way is to standardize the data. We do this next.  
 
 # 4. Principle Component Analysis on the standardized variables
@@ -75,6 +77,7 @@ pca_human2 <- prcomp(human2_std)
 
 biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 ```
+
 As can be seen from the plot above, now we have more realistic and precise explanations of the variance of the variables by the two components. But, we can still improve the plot further to show how much of the variance is explained by the two components. 
 
 ```{r}
