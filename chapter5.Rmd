@@ -153,5 +153,6 @@ Now, let's visualise our Multiple Correspondence Analysis
 ```{r}
 plot(mca, invisible=c("ind"), habillage = "quali")
 ```
+
 We can see from the plot above that two dimensions (1 and 2) explain 15.24% and 14.23% of the variance, respectively. Both Dimesions, to some extent, explain similar variables. For example, dimension 1 includes variables such as the type of tea (i.e., back, green or earl gray), how the tea is consumed (teabag or unpackaged), and where tea is consumed (e.g., chainstore or tea shop). Dimension 2 also explains this. The distinguishing factor of dimension 2 compared to 1 is that dimension 2 explains How tea is consumed (in terms of what is added to tea: sugar, raw or, e.g., lemon) better than dimension 1. In general, it seems that this dataset could have more dimensions, as other dimensions such as 3 and 4 also explan considerable portion of the variance.   
 
