@@ -44,10 +44,18 @@ cor(human2) %>% corrplot
 As can be seen from the correlations, for instance, adolescent birth rate (Ado.Birth) and Maternal mortality ratio (Mar.Mor) have a strong positive corrleation, which is unsurprising. Less unsurpersing is the negative strong relationship between life expectancy at birth (Life.Exp) and Mat.Mor.
 
 # 3. Principle Component Analysis on the not standardized variables
+```{r}
+pca_human2 <- prcomp(human2)
+
+biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+
+```
+
+As can be seen from the graph above, when the variables are not standardized, the results are not promising. Now we have one dimension in the whole dataset. This is because PCA is an unsupervised method of dimension reduction technique. Second, PCA is sensitive to the relative scaling of the original variable, assuming that features with larger variace are more important than the ones with smaller variance. To address this issue, one way is to standardize the data. We do this next.  
 
 # 4. Principle Component Analysis on the standardized variables
-
-In order to perform principle component analysis it is better to first standardize the variables. This is because PCS preassumes that variables with larger variance are more important than those with smaller.  
+By standardizing the data, all the variables will have the mean of 0 and standard deviation of 1. This gives us a more realistic PCA. 
+  
 ```{r}
 human2_std <- scale(human2)
 
@@ -55,7 +63,7 @@ summary (human2_std)
 
 ```
 
-Now let's perform PCA with the Singular Value Decomposition (SVD) method. 
+Now that the varables are standardized, let's perform PCA with the Singular Value Decomposition (SVD) method. 
 ```{r}
 pca_human2 <- prcomp(human2_std)
 ```
@@ -64,4 +72,9 @@ Now, we draw a biplot of the principal component representation and the original
 ```{r}
 biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 ```
+
+Now all the variables of the study have been reduced to two principle components (PC1 and PC2). The Biplot implies that, for instance, Labor.FM (labor, female/male ratio ) is almost orthogonal (uncorrelated) with Edu.Exp (expected years of schooling). We can see this in the correlation matrix and graph, run in section 2. On the other hand, we can infer from the graph that Labor.FM and Parli.F (percentage of female representatives in parliament) are correlated, which is not surprising. 
+
+Further, we can understand from the plot that Labor.FM and Parli.F are contributing to the second dimension, PC2. The same holds true for other variables and PC1. The reason behind this is that those features controbute to the dimension with similar direction.
+
 
