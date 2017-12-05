@@ -96,5 +96,12 @@ Now all the variables of the study have been reduced to two principle components
 Further, we can understand from the plot that Labor.FM and Parli.F are contributing to the second dimension, PC2. The same holds true for other variables, which contibute to PC1. The reason is that, those features contribute to the dimensions with similar direction. As PC1 includes more variables, it explains more of the variance of the data.
 
 # 5. Interpretation of the first two principle components
+As I explained in the above, PC2 explains less of the variance. It includes the variables, Labor.FM and Parli.F. Both of these two variables relate to the involvment of females in a given society. The higher the values, the higher the involvment of females. These two variables unsurprisingly also correlate with one another. Overall, we could refer to PC2 as gender development in the society. This is the second big component (also referred to as "factor"") of our dataset.
+
+The first component, which explains the majority of the variance, includes variables such as Expected years of schooling, Life expectancy at birth, and Adolescent birth rate. They mainly refer to health and education, representing a multidimensional index, which indicates the population health, reproduction health index, and access to educational resources. 
+
+
+
+
 
 
