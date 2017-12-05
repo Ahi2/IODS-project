@@ -9,6 +9,8 @@ output: html_document
 library(GGally)
 library(dplyr)
 library(corrplot)
+library(ggplot2)
+library(tidyr)
 ```
 
 # 1. Loading data into R
@@ -100,8 +102,52 @@ As I explained in the above, PC2 explains less of the variance. It includes the 
 
 The first component, which explains the majority of the variance, includes variables such as Expected years of schooling, Life expectancy at birth, and Adolescent birth rate. They mainly refer to health and education, representing a multidimensional index, which indicates the population health, reproduction health index, and access to educational resources. 
 
+# 6. The tea time!: looking at the tea dataset
+The tea dataset already exists in a package called FactoMiner in R. First we load the package, and then we'll look at the structure and dimensions of the "tea"" dataset. 
 
+```{r}
+library(FactoMineR)
+```
 
+```{r}
+data(tea)
+str(tea)
+dim(tea)
+```
 
+As can be seen the dataset includes 300 observations and 36 variables.
 
+Now we select some variables on which to perform a PCA. I select the following variables, creating a new dataset, calling it tea_time: 
+```{r}
+keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
+
+tea_time <- select(tea, one_of(keep_columns))
+```
+
+Now let's look at the summary and strucutre of the new dataset:
+```{r}
+summary(tea_time)
+str(tea_time)
+```
+
+Now let's visualize the dataset.
+```{r}
+gather(tea_time) %>% ggplot(aes(value)) + geom_bar() + facet_wrap("key", scales = "free") + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) 
+```
+
+As an example, if we look at how the tea is consumed we can see that through tea bag. As another example, the last graph shows that tea is consumed mainly in chain stores. 
+
+Now let's look at the Multiple Correspondence Analysis of the dataset, a method to analyze qualitative data, an extension of Correspondence analysis (CA). 
+
+```{r}
+mca <- MCA(tea_time, graph = FALSE)
+summary(mca)
+
+```
+
+Now, let's visualise our Multiple Correspondence Analysis 
+```{r}
+plot(mca, invisible=c("ind"), habillage = "quali")
+```
+We can see from the plot above that two dimensions (1 and 2) explain 15.24% and 14.23% of the variance, respectively. Both Dimesions, to some extent, explain similar variables. For example, dimension 1 includes variables such as the type of tea (i.e., back, green or earl gray), how the tea is consumed (teabag or unpackaged), and where tea is consumed (e.g., chainstore or tea shop). Dimension 2 also explains this. The distinguishing factor of dimension 2 compared to 1 is that dimension 2 explains How tea is consumed (in terms of what is added to tea: sugar, raw or, e.g., lemon) better than dimension 1. In general, it seems that this dataset could have more dimensions, as other dimensions such as 3 and 4 also explan considerable portion of the variance.   
 
