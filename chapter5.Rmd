@@ -32,7 +32,7 @@ summary(human2)
 
 # 2. Graphical overview of the data and summary of the variables
 
-Now we look at the normal disctributions, correlationshs, and a graphical overview.  
+Now we look at the normal disctributions, correlationshs, and a graphical overview of the dataset.  
 ```{r}
 ggpairs(human2)
 ```
