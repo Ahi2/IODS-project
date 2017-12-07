@@ -5,7 +5,7 @@ date: "19 marraskuuta 2017"
 output: html_document
 ---
 
-# Exercise 3. Logistic Regression 
+# Logistic Regression 
 
 In this exercise, I am going to perform logistic regressoin to see the effect of different variabes on students' alcohol consumption. I have combined Math-Por dataset and called alc, which includes data from students in both mathematics and Portugies classes. First, let us run some of the libraries we need. 
 

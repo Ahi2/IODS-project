@@ -5,7 +5,7 @@ date: "25 marraskuuta 2017"
 output: html_document
 ---
 
-# Exercise 4: Clustering and classification
+# Clustering and classification
 
 In this exercise, we use Boston dara, already loaded in r. But, first let's access some libraries we will need during the exercise. 
 

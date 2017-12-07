@@ -5,7 +5,7 @@ date: "2 joulukuuta 2017"
 output: html_document
 ---
 
-# CHAPTER 5. Dimensionality reduction techniques
+# Dimensionality reduction techniques
 
 In this exercise we use a real dataset developed by the UN, which is developed to measure the human development of countries, in order to perform Principle Component Analysis (PCA), a method to reduce the number of measured (continuous) and correlated variables into a few uncorrelated components that collect together as much variance as possible from the original variables. 
 
